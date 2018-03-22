@@ -2,11 +2,8 @@
 # Double Transposition Cipher
 module DoubleTranspositionCipher
   def self.encrypt(document, key)
-    #
-    document = document.to_s
-    row_col_size = Math.sqrt(document.size).round
-    matrix = document.chars.to_a.each_slice(row_col_size).to_a
-    double_transposition_shuffle(matrix,key).join
+    matrix = create_matrix(document.to_s.chars)
+    double_transposition_shuffle(matrix, key).join
   end
 
   def self.double_transposition_shuffle(matrix, key)
@@ -21,13 +18,17 @@ module DoubleTranspositionCipher
     ordered_list
   end
 
+  def self.create_matrix(list)
+    row_col_size = Math.sqrt(list.size).round
+    list.each_slice(row_col_size).to_a
+  end
+
   def self.decrypt(ciphertext, key)
-    row_col_size = Math.sqrt(ciphertext.size).round
     matrix = ciphertext.to_s.chars
     new_matrix = Array.new(ciphertext.size)
-
-    digit_matrix = (0..(ciphertext.size - 1)).to_a.each_slice(row_col_size)
-    digit_matrix = double_transposition_shuffle(digit_matrix.to_a, key).flatten
+    digit_matrix = double_transposition_shuffle(
+      create_matrix((0..(ciphertext.size - 1)).to_a), key
+    ).flatten
     digit_matrix.each_with_index { |v, i| new_matrix[v] = matrix[i] }
     new_matrix.join
   end
