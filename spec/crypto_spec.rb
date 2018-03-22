@@ -28,6 +28,7 @@ describe 'Test card info encryption' do
       enc = SubstitutionCipher::Permutation.encrypt(@cc, @key)
       enc.wont_equal @cc.to_s
       enc.wont_be_nil
+      enc.must_equal "J\x03.\a#D3S\x03\t\x036\x18TPPWa4aT6P6\x18Pa\x03n\x033r\x1A2S\x17\e2U.7L\x17\e3\x03\t\x03@\x17S aW 4W4W\x03n\x03U\x19.3S\x03\t\x03*U\a#}\x17B\x15\x17}\x03n\x03\x1ES3L2\e7.3\e\x19USu\x03\t\x03K2-\x17\x03O"
     end
 
     it 'should decrypt text' do
