@@ -38,7 +38,9 @@ module SubstitutionCipher
     def self.encrypt(document, key)
       # TODO: encrypt string using a permutation cipher
       random_dict = (0..127).to_a.shuffle(random: Random.new(key))
-      document.to_s.chars.map(&:ord).map { |x| random_dict.find_index(x) }.pack('C*')
+      document.to_s.chars.map(&:ord).map do |x|
+        random_dict.find_index(x)
+      end.pack('C*')
     end
 
     # Decrypts String document using integer key

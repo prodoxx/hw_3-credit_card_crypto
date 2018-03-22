@@ -12,7 +12,7 @@ module DoubleTranspositionCipher
   end
 
   def self.unshuffle(list, random:)
-    shuffled_order = (0..(list.size - 1)).to_a.shuffle!(random: random)
+    shuffled_order = (0..(list.size - 1)).to_a.shuffle(random: random)
     ordered_list = Array.new(list.size)
     shuffled_order.each_with_index { |val, i| ordered_list[val] = list[i] }
     ordered_list
