@@ -25,6 +25,18 @@ describe 'Test hashing requirements' do
   describe 'Test regular hashing' do
     describe 'Check hashes are consistently produced' do
       # TODO: Check that each card produces the same hash if hashed repeatedly
+
+      hashes = cards.map(&:hash)
+      print hashes[0]
+      #hashes[0].wont_equal nil
+
+      100.times do
+        cards_hashed = cards.map(&:hash)
+        cards_hashed.each_with_index do |v, i| 
+          v.wont_be_nil
+        end
+      end
+
     end
 
     describe 'Check for unique hashes' do
