@@ -47,7 +47,7 @@ class CreditCard
     #   - Produce a hash (using default hash method) of the credit card's
     #     serialized contents.
     #   - Credit cards with identical information should produce the same hash
-    #to_s.hash
+    to_s.hash
   end
 
   # return a cryptographically secure hash
