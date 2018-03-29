@@ -16,6 +16,6 @@ module ModernSymmetricCipher
 
   def self.decrypt(encrypted_cc, key)
     simple_box = RbNaCl::SimpleBox.from_secret_key(Base64.strict_decode64(key))
-    simple_box.decrypt(Base64.decode64(encrypted_cc))
+    simple_box.decrypt(Base64.strict_decode64(encrypted_cc))
   end
 end

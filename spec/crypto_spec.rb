@@ -25,7 +25,6 @@ key = 3
 sk_cipher_key = ModernSymmetricCipher.generate_new_key
 
 describe 'Test card info encryption' do
-
   describe 'Using Caesar cipher' do
     test_encryption(SubstitutionCipher::Caesar, cc, key)
     test_encryption(SubstitutionCipher::Caesar, cc, key, false)

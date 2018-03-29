@@ -7,6 +7,7 @@ module DoubleTranspositionCipher
   end
 
   def self.double_transposition_shuffle(matrix, key)
+    key = key.to_s.bytes.reduce(&:*)
     matrix = matrix.shuffle(random: Random.new(key))
     matrix.map { |s| s.shuffle(random: Random.new(key)) }
   end
@@ -23,13 +24,16 @@ module DoubleTranspositionCipher
     list.each_slice(row_col_size).to_a
   end
 
+  def self.transpose_list(order, list)
+    new_list = Array.new(list.size)
+    order.each_with_index { |v, i| new_list[v] = list[i] }
+    new_list
+  end
+
   def self.decrypt(ciphertext, key)
-    matrix = ciphertext.to_s.chars
-    new_matrix = Array.new(ciphertext.size)
     digit_matrix = double_transposition_shuffle(
       create_matrix((0..(ciphertext.size - 1)).to_a), key
     ).flatten
-    digit_matrix.each_with_index { |v, i| new_matrix[v] = matrix[i] }
-    new_matrix.join
+    transpose_list(digit_matrix, ciphertext.to_s.chars).join
   end
 end
