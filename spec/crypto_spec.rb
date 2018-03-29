@@ -1,41 +1,47 @@
 require_relative '../credit_card'
 require_relative '../substitution_cipher'
+require_relative '../double_trans_cipher'
+require_relative '../sk_cipher'
 require 'minitest/autorun'
 
-describe 'Test card info encryption' do
-  before do
-    @cc = CreditCard.new('4916603231464963', 'Mar-30-2020', 'Soumya Ray', 'Visa')
-    @key = 3
+def test_encryption(encryption, document, key, should_encrypt = true)
+  should = should_encrypt ? 'should encrypt card information' : 'should decrypt text'
+  it should do
+    if should_encrypt
+      ed = encryption.encrypt(document, key)
+      ed.wont_be_nil
+      ed.wont_equal document.to_s
+    else
+      en = encryption.encrypt(document, key)
+      ed = encryption.decrypt(en, key)
+      ed.wont_be_nil
+      ed.must_equal document.to_s
+    end
   end
+end
 
+cc = CreditCard.new('4916603231464963', 'Mar-30-2020', 'Soumya Ray', 'Visa')
+key = 3
+sk_cipher_key = ModernSymmetricCipher.generate_new_key
+
+describe 'Test card info encryption' do
   describe 'Using Caesar cipher' do
-    it 'should encrypt card information' do
-      enc = SubstitutionCipher::Caesar.encrypt(@cc, @key)
-      enc.wont_equal @cc.to_s
-      enc.wont_be_nil
-    end
-
-    it 'should decrypt text' do
-      enc = SubstitutionCipher::Caesar.encrypt(@cc, @key)
-      dec = SubstitutionCipher::Caesar.decrypt(enc, @key)
-      dec.must_equal @cc.to_s
-    end
+    test_encryption(SubstitutionCipher::Caesar, cc, key)
+    test_encryption(SubstitutionCipher::Caesar, cc, key, false)
   end
 
   describe 'Using Permutation cipher' do
-    it 'should encrypt card information' do
-      enc = SubstitutionCipher::Permutation.encrypt(@cc, @key)
-      enc.wont_equal @cc.to_s
-      enc.wont_be_nil
-    end
-
-    it 'should decrypt text' do
-      enc = SubstitutionCipher::Permutation.encrypt(@cc, @key)
-      dec = SubstitutionCipher::Permutation.decrypt(enc, @key)
-      dec.must_equal @cc.to_s
-    end
+    test_encryption(SubstitutionCipher::Permutation, cc, key)
+    test_encryption(SubstitutionCipher::Permutation, cc, key, false)
   end
 
-  # TODO: Add tests for double transposition and modern symmetric key ciphers
-  #       Can you DRY out the tests using metaprogramming? (see lecture slide)
+  describe 'Using Double Transposition cipher' do
+    test_encryption(DoubleTranspositionCipher, cc, key)
+    test_encryption(DoubleTranspositionCipher, cc, key, false)
+  end
+
+  describe 'Using Modern Symmetric Cipher' do
+    test_encryption(ModernSymmetricCipher, cc, sk_cipher_key)
+    test_encryption(ModernSymmetricCipher, cc, sk_cipher_key, false)
+  end
 end
